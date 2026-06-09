@@ -1,4 +1,3 @@
-/* compass-default-v1.0.css */
 .compass-wrap{
   --size:320px;
   --accent:#7cc4ff;
@@ -7,13 +6,20 @@
   position:relative;
   width:100%;
   max-width:var(--size);
-  margin:0 auto;
-  padding:30px 18px;
+  margin:24px auto;
+  padding:60px 18px 80px;
   box-sizing:border-box;
   font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
   perspective:900px;
   -webkit-tap-highlight-color:transparent;
+  isolation:isolate;
+  overflow:visible;
+  contain:layout;
+  clear:both;
+  display:block;
 }
+.compass-wrap + *{margin-top:24px;}
+* + .compass-wrap{margin-top:24px;}
 .compass-wrap *:focus,
 .compass-wrap *:focus-visible{outline:none;-webkit-tap-highlight-color:transparent;}
 .compass-wrap .d-input{
@@ -84,13 +90,9 @@
   left:var(--x);
   width:11px;
   height:11px;
-  border-radius:50%;
-  background:var(--accent);
-  color:var(--accent);
   cursor:pointer;
   z-index:5;
   transform:translate(-50%,-50%) translateZ(12px);
-  transition:transform 0.25s ease,box-shadow 0.25s ease;
   pointer-events:auto;
   border:0;
   outline:none;
@@ -99,16 +101,25 @@
 .compass-wrap .marker::before{
   content:"";
   position:absolute;
-  inset:-4px;
+  inset:0;
   border-radius:50%;
   background:var(--accent);
-  opacity:0.32;
-  filter:blur(4px);
+  box-shadow:0 0 8px var(--accent),0 0 14px rgba(255,255,255,0.28);
+  transition:transform 0.25s ease,box-shadow 0.25s ease;
+  transform-origin:center;
+}
+.compass-wrap .marker::after{
+  content:"";
+  position:absolute;
+  inset:-18px;
+  border-radius:50%;
+  background:transparent;
   z-index:-1;
 }
-.compass-wrap .marker:hover{
-  transform:translate(-50%,-50%) translateZ(20px) scale(1.4);
-  z-index:30;
+.compass-wrap .marker:hover{z-index:30;}
+.compass-wrap .marker:hover::before{
+  transform:scale(1.6);
+  box-shadow:0 0 14px var(--accent),0 0 22px rgba(255,255,255,0.4);
 }
 .compass-wrap .dir{
   position:absolute;
@@ -141,25 +152,57 @@
 .compass-wrap .tip{
   position:absolute;
   width:var(--tip-w);
-  background:rgba(18,20,28,0.92);
+  background:rgba(18,20,28,0.95);
   backdrop-filter:blur(8px);
   -webkit-backdrop-filter:blur(8px);
   border:1px solid rgba(255,255,255,0.16);
   border-radius:6px;
   color:#f2f2f2;
   opacity:0;
+  visibility:hidden;
   pointer-events:none;
-  transition:opacity 0.18s ease;
+  transition:opacity 0.2s ease,visibility 0s linear 0.2s;
   box-shadow:0 10px 24px rgba(0,0,0,0.42);
-  overflow:hidden;
-  bottom:180%;
+  bottom:calc(100% + 14px);
   left:50%;
-  transform:translate(-50%,4px) translateZ(24px);
+  transform:translate(-50%,0) translateZ(28px);
+  z-index:40;
 }
-.compass-wrap .marker[data-side="bottom"] .tip{bottom:auto;top:180%;}
-.compass-wrap .marker[data-align="left"] .tip{left:0;transform:translate(0,4px) translateZ(24px);}
-.compass-wrap .marker[data-align="right"] .tip{left:auto;right:0;transform:translate(0,4px) translateZ(24px);}
-.compass-wrap .marker:hover .tip{opacity:1;pointer-events:auto;}
+.compass-wrap .tip::before{
+  content:"";
+  position:absolute;
+  left:-12px;
+  right:-12px;
+  bottom:-16px;
+  height:18px;
+  background:transparent;
+  pointer-events:auto;
+}
+.compass-wrap .marker[data-side="bottom"] .tip{
+  bottom:auto;
+  top:calc(100% + 14px);
+}
+.compass-wrap .marker[data-side="bottom"] .tip::before{
+  bottom:auto;
+  top:-16px;
+}
+.compass-wrap .marker[data-align="left"] .tip{
+  left:0;
+  transform:translate(0,0) translateZ(28px);
+}
+.compass-wrap .marker[data-align="right"] .tip{
+  left:auto;
+  right:0;
+  transform:translate(0,0) translateZ(28px);
+}
+.compass-wrap .marker:hover .tip,
+.compass-wrap .marker:focus-within .tip,
+.compass-wrap .marker .tip:hover{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  transition:opacity 0.2s ease,visibility 0s linear 0s;
+}
 .compass-wrap .tip-head{
   padding:5px 8px;
   border-bottom:1px solid rgba(255,255,255,0.1);
@@ -192,9 +235,11 @@
   position:absolute;
   border:5px solid transparent;
 }
-.compass-wrap .marker[data-side="top"] .tip::after{top:100%;border-top-color:rgba(18,20,28,0.92);}
-.compass-wrap .marker[data-side="bottom"] .tip::after{bottom:100%;border-bottom-color:rgba(18,20,28,0.92);}
-.compass-wrap .marker[data-align="center"] .tip::after{left:50%;transform:translateX(-50%);}
+.compass-wrap .marker[data-side="top"] .tip::after,
+.compass-wrap .marker:not([data-side]) .tip::after{top:100%;border-top-color:rgba(18,20,28,0.95);}
+.compass-wrap .marker[data-side="bottom"] .tip::after{bottom:100%;border-bottom-color:rgba(18,20,28,0.95);}
+.compass-wrap .marker[data-align="center"] .tip::after,
+.compass-wrap .marker:not([data-align]) .tip::after{left:50%;transform:translateX(-50%);}
 .compass-wrap .marker[data-align="left"] .tip::after{left:14px;}
 .compass-wrap .marker[data-align="right"] .tip::after{right:14px;}
 .compass-wrap #t-nw:checked ~ .compass-stage .compass-dial{transform:rotateX(-11deg) rotateY(13deg);box-shadow:-14px 18px 40px rgba(0,0,0,0.34),inset 0 1px 0 rgba(255,255,255,0.25);}
@@ -202,11 +247,28 @@
 .compass-wrap #t-w:checked  ~ .compass-stage .compass-dial{transform:rotateY(14deg);box-shadow:-16px 10px 38px rgba(0,0,0,0.32),inset 0 1px 0 rgba(255,255,255,0.25);}
 .compass-wrap #t-se:checked ~ .compass-stage .compass-dial{transform:rotateX(10deg) rotateY(-12deg);box-shadow:14px -10px 38px rgba(0,0,0,0.32),inset 0 1px 0 rgba(255,255,255,0.25);}
 .compass-wrap #t-s:checked  ~ .compass-stage .compass-dial{transform:rotateX(12deg);box-shadow:0 -16px 40px rgba(0,0,0,0.32),inset 0 1px 0 rgba(255,255,255,0.25);}
+.compass-wrap #t-nw:checked ~ .compass-stage label[for="t-nw"]::before,
+.compass-wrap #t-ne:checked ~ .compass-stage label[for="t-ne"]::before,
+.compass-wrap #t-w:checked  ~ .compass-stage label[for="t-w"]::before,
+.compass-wrap #t-se:checked ~ .compass-stage label[for="t-se"]::before,
+.compass-wrap #t-s:checked  ~ .compass-stage label[for="t-s"]::before{
+  transform:scale(1.7);
+  box-shadow:0 0 18px var(--accent),0 0 30px rgba(255,255,255,0.45);
+}
 .compass-wrap #t-nw:checked ~ .compass-stage label[for="t-nw"],
 .compass-wrap #t-ne:checked ~ .compass-stage label[for="t-ne"],
 .compass-wrap #t-w:checked  ~ .compass-stage label[for="t-w"],
 .compass-wrap #t-se:checked ~ .compass-stage label[for="t-se"],
 .compass-wrap #t-s:checked  ~ .compass-stage label[for="t-s"]{
-  transform:translate(-50%,-50%) translateZ(26px) scale(1.45);
-  box-shadow:0 0 16px var(--accent);
-    }
+  z-index:35;
+}
+.compass-wrap #t-nw:checked ~ .compass-stage label[for="t-nw"] .tip,
+.compass-wrap #t-ne:checked ~ .compass-stage label[for="t-ne"] .tip,
+.compass-wrap #t-w:checked  ~ .compass-stage label[for="t-w"] .tip,
+.compass-wrap #t-se:checked ~ .compass-stage label[for="t-se"] .tip,
+.compass-wrap #t-s:checked  ~ .compass-stage label[for="t-s"] .tip{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  transition:opacity 0.2s ease,visibility 0s linear 0s;
+}
