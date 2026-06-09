@@ -1,7 +1,7 @@
-/* 最外层深灰带边框折叠壳 */
+/* 物资管理最外层折叠壳（完全还原你最满意的原版参数） */
 .inv-out {
-    background: #1a1a1a;
-    border: 2px solid #333;
+    background: #2b2b2b;
+    border: 2px solid #555;
     border-radius: 8px;
     padding: 10px;
     color: #ddd;
@@ -11,22 +11,22 @@
     font-weight: bold;
     cursor: pointer;
 }
-/* 内层深蓝科技底板 */
-.inv-in {
+
+/* 【核心修改】单独套在10个背包格子外面的深蓝色框（完全复刻基建内部背景） */
+.b-box {
     background: #0f1115;
     border: 1px solid #2d3748;
     border-radius: 6px;
     padding: 10px;
     margin-top: 10px;
 }
+
 /* 随身背包 10格居中网格 */
 .b-grd {
     display: grid;
     grid-template-columns: repeat(5, 35px);
     justify-content: center;
     gap: 5px;
-    margin-bottom: 8px;
-    margin-top: 5px;
 }
 .b-slt {
     position: relative;
@@ -63,14 +63,15 @@
     z-index: 999;
     pointer-events: none;
 }
-/* 大型仓库折叠与实体框 */
+
+/* 大型仓库（完全还原你给的原版实体框样式） */
 .wh-det {
     margin-top: 5px;
 }
 .wh-sum {
     font-size: 12px;
     cursor: pointer;
-    color: #a0aec0;
+    color: #3498db;
 }
 .wh-box {
     font-size: 12px;
