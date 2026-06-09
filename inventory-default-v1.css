@@ -1,20 +1,22 @@
-/* 最外层硬核暗黑容器 */
+/* 最外层硬核暗黑容器：增加四周留白，与外部标题拉开距离 */
 .b-container {
     background: #0f1115;
     border: 1px solid #2d3748;
     border-radius: 6px;
-    padding: 12px;
+    padding: 16px 20px; /* 上下16px，左右20px，拒绝顶格 */
+    margin-top: 10px; /* 与上方的折叠标题拉开距离 */
+    margin-bottom: 5px;
     font-family: monospace;
     color: #a0aec0;
 }
-/* 背包方格网格流，保持10格子水平居中 */
+/* 背包方格网格流：加大上下间距和格子间距 */
 .b-grd {
     display: grid;
     grid-template-columns: repeat(5, 35px);
     justify-content: center;
-    gap: 5px;
-    margin-bottom: 8px;
+    gap: 8px; /* 格子之间的间距稍微放大，不再那么拥挤 */
     margin-top: 5px;
+    margin-bottom: 20px; /* 强制拉开与下方仓库分割线的距离 */
 }
 /* 默认极简方格样式 */
 .b-slt {
@@ -52,9 +54,12 @@
     z-index: 999;
     pointer-events: none;
 }
-/* 大型仓库的嵌套虚线分割线 */
+/* 大型仓库的嵌套虚线分割线：加大留白 */
 .b-wh {
     border-top: 1px dashed #2d3748;
-    margin-top: 10px;
-    padding-top: 8px;
+    padding-top: 12px; /* 分割线与内部文字的距离 */
+}
+/* 展开后的底部留白 */
+.b-wh[open] {
+    padding-bottom: 5px;
 }
