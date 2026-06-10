@@ -178,14 +178,32 @@
   pointer-events: auto;
 }
 
-/* ===== Marker 位置（用 data-x/data-y 避免 style 内联变量被平台过滤） ===== */
-.compass-wrap .marker[data-x="20"][data-y="20"] { top: 20%; left: 25%; }
-.compass-wrap .marker[data-x="25"][data-y="20"] { top: 20%; left: 25%; }
-.compass-wrap .marker[data-x="75"][data-y="25"] { top: 25%; left: 75%; }
-.compass-wrap .marker[data-x="15"][data-y="50"] { top: 50%; left: 15%; }
-.compass-wrap .marker[data-x="80"][data-y="70"] { top: 70%; left: 80%; }
-.compass-wrap .marker[data-x="85"][data-y="50"] { top: 85%; left: 50%; }
-.compass-wrap .marker[data-x="50"][data-y="85"] { top: 85%; left: 50%; }
+/* ===== Marker 位置（内联 style，避免平台过滤 style 中的坐标） ===== */
+/* 提示词生成时用 data-x/data-y 仅作提示参考，CSS 读取 top/left 计算偏移 */
+.compass-wrap .marker {
+  /* 内联 style="top: Y%; left: X%;" 动态控制位置 */
+  transform: translateZ(12px);
+}
+.compass-wrap .marker[data-side="bottom"] {
+  transform: translateY(-100%) translateZ(12px);
+}
+.compass-wrap .marker:hover,
+.compass-wrap .marker:focus {
+  transform: translateZ(20px) scale(1.45);
+}
+.compass-wrap .marker[data-side="bottom"]:hover,
+.compass-wrap .marker[data-side="bottom"]:focus {
+  transform: translateY(-100%) translateZ(20px) scale(1.45);
+}
+.compass-wrap .marker:hover .tip,
+.compass-wrap .marker:focus .tip {
+  opacity: 1;
+  pointer-events: auto;
+}
+.compass-wrap .marker:hover::before,
+.compass-wrap .marker:focus::before {
+  opacity: 0.5;
+}
 
 /* ===== Tooltip ===== */
 .compass-wrap .tip {
