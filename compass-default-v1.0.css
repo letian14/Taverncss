@@ -65,6 +65,7 @@ inset 0 0 40px rgba(255,255,255,0.04);
   transform:rotateX(0deg) rotateY(0deg);
   transition:transform 0.6s cubic-bezier(.2,.8,.3,1),box-shadow 0.6s ease;
   pointer-events:none;
+  z-index:0;
 }
 .compass-wrap .compass-dial::before{
   content:"";

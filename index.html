@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taverncss — Design Playground</title>
+  <style>
+    /* ===== 全局基础样式 ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0a0c10;
+      color: #e0e0e0;
+      font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* ===== 页面布局 ===== */
+    .page-header {
+      text-align: center;
+      padding: 30px 0 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      margin-bottom: 40px;
+    }
+    .page-header h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #7cc4ff;
+      letter-spacing: 2px;
+    }
+    .page-header p {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.35);
+      margin-top: 6px;
+    }
+    .layout {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* ===== COMPACT-STATUS 样式（来自用户提供） ===== */
+    .compact-status {
+      background: rgba(14, 16, 22, 0.92);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 16px 20px;
+      max-width: 560px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .compact-status .status-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #7cc4ff;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+    .compact-status .status-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 9px;
+    }
+    .compact-status .status-label {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.7);
+      min-width: 72px;
+    }
+    .compact-status .progress-bar {
+      flex: 1;
+      height: 6px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .compact-status .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4facfe, #00f2fe);
+      border-radius: 3px;
+    }
+    .compact-status .status-value {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.6);
+      min-width: 32px;
+      text-align: right;
+    }
+    .compact-status .equipment-section,
+    .compact-status .event-section {
+      margin-top: 11px;
+      padding-top: 11px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .compact-status .section-label {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 4px;
+    }
+    .compact-status .section-content {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.5;
+    }
+
+    /* ===== 组件区块通用 ===== */
+    .component-block {
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .component-block > summary {
+      background: rgba(255,255,255,0.03);
+      padding: 8px 14px;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.35);
+      cursor: pointer;
+      user-select: none;
+      list-style: none;
+    }
+    .component-block > summary::-webkit-details-marker { display: none; }
+    .component-block > summary::before { content: "▶ "; font-size: 0.7rem; transition: transform 0.2s; }
+    .component-block[open] > summary::before { transform: rotate(90deg); }
+    .component-inner {
+      padding: 20px;
+    }
+
+    /* ===== STATUS-CONTAINER 样式（来自用户提供） ===== */
+    .status-container { display: flex; flex-direction: column; gap: 2px; }
+    .status-section {
+      background: rgba(14,16,22,0.92);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .status-section .section-header {
+      background: rgba(255,255,255,0.02);
+      padding: 9px 14px;
+      cursor: pointer;
+      user-select: none;
+      list-style: none;
+    }
+    .status-section .section-header::-webkit-details-marker { display: none; }
+    .status-section .section-title {
+      font-size: 0.85rem;
+      color: #7cc4ff;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+    .status-section .section-content { padding: 14px; }
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 600px) {
+      .dashboard-grid { grid-template-columns: 1fr; }
+    }
+    .quadrant {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 6px;
+      padding: 10px 12px;
+    }
+    .quadrant-header {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+    .quadrant-content { font-size: 0.8rem; color: rgba(255,255,255,0.7); line-height: 1.7; }
+    .status-indicator {
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+    .status-good { background: #48bb78; box-shadow: 0 0 5px #48bb78; }
+    .status-warning { background: #f6ad55; box-shadow: 0 0 5px #f6ad55; }
+    .status-bad { background: #fc8181; box-shadow: 0 0 5px #fc8181; }
+
+    /* 论坛 Tabs */
+    .tabs { display: flex; flex-direction: column; }
+    .tab-radio { display: none; }
+    .tab-label {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.45);
+      cursor: pointer;
+      border: 1px solid transparent;
+      border-bottom: none;
+      border-radius: 4px 4px 0 0;
+      user-select: none;
+    }
+    .tab-radio:checked + .tab-label {
+      color: #7cc4ff;
+      border-color: rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.03);
+    }
+    .tab-content { display: none; padding: 10px 0; }
+    #tab1:checked ~ .content1,
+    #tab2:checked ~ .content2,
+    #tab3:checked ~ .content3 { display: block; }
+    .post {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.65);
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      line-height: 1.5;
+    }
+    .post b { color: #7cc4ff; }
+    .post i { color: rgba(255,255,255,0.35); font-style: normal; }
+
+    /* 记忆存档 */
+    .memory-container { display: flex; flex-direction: column; gap: 8px; }
+    .memory-section {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 6px;
+    }
+    .memory-item {
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.5;
+    }
+    .memory-item:last-child { border-bottom: none; }
+    .memory-title {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 3px;
+    }
+
+    /* 基建大屏 */
+    .base-screen {
+      background: #0f1115;
+      border: 1px solid #2d3748;
+      border-radius: 6px;
+      padding: 10px;
+      font-family: monospace;
+      color: #a0aec0;
+    }
+    .base-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+    .base-tag {
+      background: #1a202c;
+      border: 1px solid #4a5568;
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #e2e8f0;
+    }
+    .base-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      font-size: 12px;
+      border-top: 1px dashed #4a5568;
+      padding-top: 8px;
+    }
+    .base-ok { color: #48bb78; }
+    .base-warn { color: #f6ad55; }
+    .base-bad { color: #fc8181; }
+
+    /* ===== INVENTORY 样式 ===== */
+    .f-box {
+      background: rgba(10, 12, 18, 0.85);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 14px;
+    }
+    .b-grd {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .b-slt {
+      aspect-ratio: 1;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      cursor: default;
+      position: relative;
+    }
+    .b-slt::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(10,12,18,0.95);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.8);
+      font-size: 0.72rem;
+      padding: 4px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s;
+      z-index: 10;
+    }
+    .b-slt:hover::after { opacity: 1; }
+    .wh-sum {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.45);
+      cursor: pointer;
+      list-style: none;
+      padding: 6px 0;
+    }
+    .wh-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 4px;
+      padding: 8px 10px;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.55);
+      margin-top: 6px;
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     页面头部
+     ============================================================ -->
+<header class="page-header">
+  <h1>TAVERNCSS</h1>
+  <p>Design Playground &mdash; 组件调试页</p>
+</header>
+
+<div class="layout">
+
+  <!-- ============================================================
+       组件 1：指南针（compass-default-v1.0.css）
+       路径: /compass-default-v1.0.css
+       ============================================================ -->
+  <link rel="stylesheet" href="compass-default-v1.0.css">
+  <div class="component-block">
+    <summary>COMPASS 指南针 &mdash; compass-default-v1.0.css</summary>
+    <div class="component-inner">
+
+      <div class="compass-wrap" style="--accent:#7cc4ff; margin-bottom: 16px;">
+        <input type="radio" class="d-input" name="dial" id="t-reset" checked="">
+        <input type="radio" class="d-input" name="dial" id="t-nw">
+        <input type="radio" class="d-input" name="dial" id="t-ne">
+        <input type="radio" class="d-input" name="dial" id="t-w">
+        <input type="radio" class="d-input" name="dial" id="t-se">
+        <input type="radio" class="d-input" name="dial" id="t-s">
+        <label for="t-reset" class="reset-area"></label>
+        <div class="compass-stage">
+          <div class="compass-dial">
+            <span class="dir dir-n">N</span>
+            <span class="dir dir-s">S</span>
+            <span class="dir dir-w">W</span>
+            <span class="dir dir-e">E</span>
+            <div class="core"></div>
+
+            <label for="t-nw" class="marker" style="--x:25%;--y:25%;" data-side="top" data-align="left">
+              <div class="tip">
+                <div class="tip-head"><b>半塌的药店</b><span>0.3km · 西北</span></div>
+                <div class="tip-body">自动门仍在摆动，内部货架凌乱。除了常见的感冒药，或许还能在柜台深处找到未开封的广谱抗生素，但要注意阴影里的游荡者。</div>
+              </div>
+            </label>
+
+            <label for="t-ne" class="marker" style="--x:75%;--y:20%;" data-side="top" data-align="right">
+              <div class="tip">
+                <div class="tip-head"><b>废弃校车残骸</b><span>0.1km · 东北</span></div>
+                <div class="tip-body">校车成了天然的屏障，阻挡了主干道上的大部分视线。残骸下方似乎堆积着一些遗弃的背包，或许能找到应急的饮用水或干粮。</div>
+              </div>
+            </label>
+
+            <label for="t-w" class="marker" style="--x:18%;--y:50%;" data-side="top" data-align="left">
+              <div class="tip">
+                <div class="tip-head"><b>居民区小径</b><span>0.5km · 正西</span></div>
+                <div class="tip-body">通往小镇深处的捷径，两旁是紧闭门户的独栋房屋。这里比主干道更压抑，但也隐藏着更多生活物资和停放在车库里的燃油桶。</div>
+              </div>
+            </label>
+
+            <label for="t-se" class="marker" style="--x:82%;--y:70%;" data-side="bottom" data-align="right">
+              <div class="tip">
+                <div class="tip-head"><b>遗留加油站</b><span>0.8km · 东南</span></div>
+                <div class="tip-body">油泵看起来已经枯竭，但地下油罐或许还有残存。周围地形开阔，是伏击的好地方，血疤帮的哨兵可能在附近活动过。</div>
+              </div>
+            </label>
+
+            <label for="t-s" class="marker" style="--x:50%;--y:80%;" data-side="bottom" data-align="center">
+              <div class="tip">
+                <div class="tip-head"><b>来时的公路</b><span>1.2km · 正南</span></div>
+                <div class="tip-body">迷雾已经封锁了视线，回程的路显得漫长而危险。没有任何补给，只有无尽的荒野和可能闻着味跟上来的丧尸犬。</div>
+              </div>
+            </label>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================
+       组件 2：Compact 状态卡
+       ============================================================ -->
+  <details class="component-block">
+    <summary>COMPACT-STATUS 紧凑状态卡</summary>
+    <div class="component-inner">
+      <div class="compact-status">
+        <div class="status-title">【魁狼山的状态】</div>
+        <div class="status-row">
+          <span class="status-label">🧬 健康度</span>
+          <div class="progress-bar"><div class="progress-fill" style="width:100%;"></div></div>
+          <span class="status-value">100%</span>
+        </div>
+        <div class="status-row">
+          <span class="status-label">🛌 体力值</span>
+          <div class="progress-bar"><div class="progress-fill" style="width:95%;"></div></div>
+          <span class="status-value">95%</span>
+        </div>
+        <div class="status-row">
+          <span class="status-label">🧟‍♀️ 感染风险</span>
+          <div class="progress-bar"><div class="progress-fill" style="width:0%;"></div></div>
+          <span class="status-value">0%</span>
+        </div>
+        <div class="equipment-section">
+          <div class="section-label">🛡️ 当前装备</div>
+          <div class="section-content">高性能复合弩、鲁格10/22步枪（消音）、开山刀x2、电网发射器</div>
+        </div>
+        <div class="event-section">
+          <div class="section-label">🚨 当前事件</div>
+          <div class="section-content">停靠于迷雾小镇入口，正在侦察环境</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- ============================================================
+       组件 3：状态仪表盘（综合面板）
+       ============================================================ -->
+  <details class="component-block">
+    <summary>STATUS-CONTAINER 状态仪表盘（多区块）</summary>
+    <div class="component-inner">
+      <div class="status-container">
+
+        <!-- 区块：状态仪表盘ing -->
+        <details class="status-section">
+          <summary class="section-header"><span class="section-title">【状态仪表盘ing】</span></summary>
+          <div class="section-content">
+            <div class="dashboard-grid">
+              <div class="quadrant">
+                <div class="quadrant-header">🚐 载具状态</div>
+                <div class="quadrant-content">
+                  <div>载具：「流浪方舟」- 生态定居型</div>
+                  <div><span class="status-indicator status-good"></span>结构完整性：100%</div>
+                  <div><span class="status-indicator status-good"></span>燃油：79%</div>
+                  <div><span class="status-indicator status-good"></span>电力：99%</div>
+                  <div><span class="status-indicator status-good"></span>水源：98%</div>
+                </div>
+              </div>
+              <div class="quadrant">
+                <div class="quadrant-header">🛡️ 装备物资</div>
+                <div class="quadrant-content">
+                  <div><span class="status-indicator status-good"></span>弹药：40支箭 / 500发.22弹</div>
+                  <div><span class="status-indicator status-good"></span>近战：开山刀x2</div>
+                  <div><span class="status-indicator status-good"></span>食物/水：20天份</div>
+                  <div><span class="status-indicator status-good"></span>医疗：综合医疗包</div>
+                </div>
+              </div>
+              <div class="quadrant">
+                <div class="quadrant-header">🌤️ 环境状态</div>
+                <div class="quadrant-content">
+                  <div>位置：小镇入口处</div>
+                  <div><span class="status-indicator status-warning"></span>天气：浓雾，能见度&lt;20米</div>
+                  <div><span class="status-indicator status-warning"></span>丧尸活动：中</div>
+                  <div><span class="status-indicator status-warning"></span>人类势力：血疤帮痕迹</div>
+                </div>
+              </div>
+              <div class="quadrant">
+                <div class="quadrant-header">👥 乘员状态</div>
+                <div class="quadrant-content">
+                  <div><span class="status-indicator status-good"></span>魁狼山：保持警惕</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <div style="height:6px;"></div>
+
+        <!-- 区块：末日小剧场ing -->
+        <details class="status-section">
+          <summary class="section-header"><span class="section-title">【末日小剧场ing】</span></summary>
+          <div class="section-content">
+            <div class="dashboard-grid">
+              <div class="quadrant">
+                <div class="quadrant-header">📻 末日广播</div>
+                <div class="quadrant-content">
+                  <div>1️⃣ 幸存者：不要进镇子！那里的雾会吃人！</div>
+                  <div>2️⃣ 帮派：收缴到一批土雷，想要的来老地方。</div>
+                  <div>3️⃣ 物资：南部海港有艘运粮船搁浅。</div>
+                  <div>4️⃣ 警告：第七钢铁师宣布二级戒严。</div>
+                </div>
+              </div>
+              <div class="quadrant">
+                <div class="quadrant-header">👂 路上八卦</div>
+                <div class="quadrant-content">
+                  <div>1️⃣ 有个背狙击枪的家伙在清尸潮。</div>
+                  <div>2️⃣ 互助会老周病了，社区主心骨要断。</div>
+                  <div>3️⃣ 有小子偷油被血疤帮打成了筛子。</div>
+                </div>
+              </div>
+              <div class="quadrant">
+                <div class="quadrant-header">🗣️ 同行人员</div>
+                <div class="quadrant-content">
+                  <div>(当前车内仅有魁狼山一人)</div>
+                </div>
+              </div>
+              <div class="quadrant">
+                <div class="quadrant-header">🧟 人际关系</div>
+                <div class="quadrant-content">
+                  <div>校车丧尸A：嗬……</div>
+                  <div>药店丧尸B：咔嚓……</div>
+                  <div>楼顶丧尸C：嗷……</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <div style="height:6px;"></div>
+
+        <!-- 区块：记忆存档ing -->
+        <details class="status-section">
+          <summary class="section-header"><span class="section-title">【记忆存档ing】</span></summary>
+          <div class="section-content">
+            <div class="memory-container">
+              <details class="memory-section">
+                <summary class="section-header"><span class="section-title">滚动记忆：(2/10)</span></summary>
+                <div class="section-content">
+                  <div class="memory-item">
+                    <div class="memory-title">记录 #1</div>
+                    <div>第1天晨 · 郊外公路 · 驾驶「流浪方舟」出发，抵达迷雾小镇。</div>
+                  </div>
+                  <div class="memory-item">
+                    <div class="memory-title">记录 #2</div>
+                    <div>第1天晨 · 小镇入口 · 下车观察环境，发现药店、校车残骸及丧尸威胁。</div>
+                  </div>
+                </div>
+              </details>
+              <details class="memory-section">
+                <summary class="section-header"><span class="section-title">永久记忆：(0/♾️)</span></summary>
+                <div class="section-content">
+                  <div class="memory-item">(尚无存档章节)</div>
+                </div>
+              </details>
+            </div>
+          </div>
+        </details>
+
+        <div style="height:6px;"></div>
+
+        <!-- 区块：废土通讯论坛 -->
+        <details class="status-section">
+          <summary class="section-header"><span class="section-title">【🌐 废土通讯论坛】</span></summary>
+          <div class="section-content">
+            <div class="tabs">
+              <input type="radio" name="forum" id="tab1" class="tab-radio" checked="">
+              <label for="tab1" class="tab-label">📡 区域频道</label>
+              <input type="radio" name="forum" id="tab2" class="tab-radio">
+              <label for="tab2" class="tab-label">⚙️ 技术论坛</label>
+              <input type="radio" name="forum" id="tab3" class="tab-radio">
+              <label for="tab3" class="tab-label">💀 幸存者墓碑</label>
+              <div class="tab-content content1">
+                <div class="post"><b>[观察]</b> 迷雾里有红眼睛的东西在飞。 <i>那是无人机，还是变异蝙蝠？</i></div>
+                <div class="post"><b>[求救]</b> 我被困在药店二楼了，救命！ <i>你自己看着办，楼下全是丧尸。</i></div>
+                <div class="post"><b>[悬赏]</b> 提供血疤帮据点坐标，奖励十个罐头。 <i>小心有命拿没命花。</i></div>
+                <div class="post"><b>[日常]</b> 今天的雾比昨天更湿，骨头都疼。 <i>这种天气最适合杀人越货了。</i></div>
+                <div class="post"><b>[声明]</b> 此区域由流浪者独眼接管，闯入者死。 <i>呵呵，又来一个装蒜的。</i></div>
+              </div>
+              <div class="tab-content content2">
+                <div class="post"><b>[求助]</b> 怎么提高无土栽培的维生素含量？ <i>加点碾碎的钙片试试。</i></div>
+                <div class="post"><b>[改装]</b> 房车防弹玻璃破了，用什么补？ <i>透明胶带加钢板，别想看得清。</i></div>
+                <div class="post"><b>[讨论]</b> 这种雾气对电路板有腐蚀吗？ <i>肯定有，做好密封。</i></div>
+                <div class="post"><b>[发现]</b> 我把电蚊拍改成了电击棍，爽歪歪。 <i>小心电死你自己。</i></div>
+                <div class="post"><b>[求购]</b> 高效率滤水芯，重金求。 <i>林清玄：我有一个，但不卖。</i></div>
+              </div>
+              <div class="tab-content content3">
+                <div class="post">阿强，死于抢劫。 <i>他是为了家人才去抢的。</i></div>
+                <div class="post">小李子，变异前自己跳了楼。 <i>是个汉子。</i></div>
+                <div class="post">林奶奶，安静地死在床上。 <i>这可能是末世最好的结局。</i></div>
+                <div class="post">猎人小张，陷阱被丧尸破了。 <i>常在河边走，哪有不湿鞋。</i></div>
+                <div class="post">幸存者「影子」，从未归来。 <i>幽灵终归是幽灵。</i></div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <div style="height:6px;"></div>
+
+        <!-- 区块：基建大屏 -->
+        <details class="status-section">
+          <summary class="section-header"><span class="section-title">【🏠 基建大屏】</span></summary>
+          <div class="section-content">
+            <div class="base-screen">
+              <div class="base-row">
+                <span class="base-tag">🔋电力[99%]</span>
+                <span class="base-tag">💧纯水[98L]</span>
+                <span class="base-tag">🥩储备粮[20D]</span>
+              </div>
+              <div class="base-grid">
+                <div>水培支架：<span class="base-ok">运转正常</span></div>
+                <div>空气过滤：<span class="base-ok">运转正常</span></div>
+                <div>感应雷达：<span class="base-ok">运转正常</span></div>
+                <div>生态温室：<span class="base-ok">运转正常</span></div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <div style="height:6px;"></div>
+
+        <!-- 区块：物资管理 -->
+        <details class="status-section">
+          <summary class="section-header"><span class="section-title">【🎒 物资管理】</span></summary>
+          <div class="section-content">
+            <div class="f-box">
+              <div class="b-grd">
+                <div class="b-slt" data-tip="鲁格步枪 x1">🔫</div>
+                <div class="b-slt" data-tip="复合弩 x1">🏹</div>
+                <div class="b-slt" data-tip="开山刀 x2">🔪</div>
+                <div class="b-slt" data-tip="电网发射器 x1">⚡</div>
+                <div class="b-slt" data-tip="医疗包 x1">🩹</div>
+                <div class="b-slt" data-tip="空位">  </div>
+                <div class="b-slt" data-tip="空位">  </div>
+                <div class="b-slt" data-tip="空位">  </div>
+                <div class="b-slt" data-tip="空位">  </div>
+                <div class="b-slt" data-tip="空位">  </div>
+              </div>
+              <details>
+                <summary class="wh-sum">🏢 大型仓库（点击展开）</summary>
+                <div class="wh-box">
+                  📦种子x1套 &nbsp;|&nbsp; 🛠️工具组x1 &nbsp;|&nbsp; 📚生存书籍x5 &nbsp;|&nbsp; ⚙️备用零件x少量
+                </div>
+              </details>
+            </div>
+          </div>
+        </details>
+
+      </div>
+    </div>
+  </details>
+
+</div><!-- .layout -->
+
+</body>
+</html>
