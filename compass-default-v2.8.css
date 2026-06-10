@@ -1,4 +1,4 @@
-/* compass-default-v2.7.css */
+/* compass-default-v2.8.css */
 .compass-wrap {
   --size: 320px;
   --accent: #7cc4ff;
@@ -27,14 +27,15 @@
   outline: none;
   -webkit-tap-highlight-color: transparent;
 }
-/* Radio */
+/* Radio & marker-point */
 .compass-wrap .m-tilt,
-.compass-wrap .marker-point { display: none !important; }
+.compass-wrap .marker-point {
   position: absolute;
   width: 0;
   height: 0;
   opacity: 0;
   pointer-events: none;
+  display: none;
 }
 /* Reset */
 .compass-wrap .reset-area {
