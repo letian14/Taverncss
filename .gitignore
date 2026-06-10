@@ -9,10 +9,8 @@ Thumbs.db
 # Git
 .git/
 
-# Only CSS files are synced to GitHub
-# Ignore everything else
-*
-
-# Whitelist CSS files only
-!.gitignore
-!*.css
+# GitHub sync: only CSS files (local keeps everything)
+*.md
+*.mdc
+index.html
+prompts/
