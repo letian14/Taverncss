@@ -6,7 +6,7 @@
   --dial-rotate: 0deg;
   --tip-max-h: 90px;
   position: relative;
-  width: 100%;
+  width: max-content;
   max-width: var(--size);
   margin: 0 auto;
   padding: 30px 18px;
