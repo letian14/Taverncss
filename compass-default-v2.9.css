@@ -4,7 +4,6 @@
   --accent: #7cc4ff;
   --accent-dim: rgba(124, 196, 255, 0.32);
   --dial-rotate: 0deg;
-  --tip-w: 170px;
   --tip-max-h: 90px;
   position: relative;
   width: 100%;
@@ -19,46 +18,28 @@
   isolation: isolate;
   overflow: visible;
 }
-.compass-wrap:hover {
-  z-index: 1000;
-}
+.compass-wrap:hover { z-index: 1000; }
 .compass-wrap *:focus,
 .compass-wrap *:focus-visible {
   outline: none;
   -webkit-tap-highlight-color: transparent;
 }
-/* Radio & marker-point */
-.compass-wrap .m-tilt,
-.compass-wrap .marker-point {
-  position: absolute;
-  width: 0;
-  height: 0;
-  opacity: 0;
-  pointer-events: none;
-  display: none;
-}
-/* Reset */
-.compass-wrap .reset-area {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  cursor: default;
-}
+
 /* Stage */
 .compass-wrap .compass-stage {
   position: relative;
   width: 100%;
-  aspect-ratio: 1/1;
+  aspect-ratio: 1 / 1;
   transform-style: preserve-3d;
   z-index: 1;
-  pointer-events: none;
 }
-@supports not (aspect-ratio: 1/1) {
+@supports not (aspect-ratio: 1 / 1) {
   .compass-wrap .compass-stage {
     height: 0;
     padding-bottom: 100%;
   }
 }
+
 /* Dial */
 .compass-wrap .compass-dial {
   position: absolute;
@@ -75,10 +56,7 @@
   box-sizing: border-box;
   transform-style: preserve-3d;
   transform: rotate(var(--dial-rotate));
-  transition:
-    transform 0.6s cubic-bezier(0.2, 0.8, 0.3, 1),
-    box-shadow 0.6s ease;
-  pointer-events: none;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.3, 1), box-shadow 0.6s ease;
 }
 .compass-wrap .compass-dial::before {
   content: "";
@@ -94,6 +72,7 @@
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.14);
 }
+
 /* N 指示三角 */
 .compass-wrap .n-indicator {
   position: absolute;
@@ -107,6 +86,7 @@
   border-bottom: 8px solid rgba(255, 138, 138, 0.75);
   pointer-events: none;
 }
+
 /* 方位字母 */
 .compass-wrap .dir {
   position: absolute;
@@ -140,6 +120,7 @@
   top: 50%;
   transform: translate(0, -50%) translateZ(6px);
 }
+
 /* 中心三角 — 反向旋转，永远指上 */
 .compass-wrap .core {
   position: absolute;
@@ -153,42 +134,60 @@
   border-right: 7px solid transparent;
   border-bottom: 11px solid rgba(255, 255, 255, 0.9);
 }
-/* Marker */
+
+/* ===== Marker 基础 ===== */
 .compass-wrap .marker {
-  --x: 50%;
-  --y: 50%;
   position: absolute;
-  top: var(--y);
-  left: var(--x);
-  width: 11px;
-  height: 11px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: var(--accent);
-  color: var(--accent);
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
   cursor: pointer;
   z-index: 5;
-  transform: translate(-50%, -50%) translateZ(12px);
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
-  pointer-events: auto;
+  transform: translateZ(12px);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
   outline: none;
 }
+/* 发光环绕 */
 .compass-wrap .marker::before {
   content: "";
   position: absolute;
-  inset: -4px;
+  inset: -3px;
   border-radius: 50%;
   background: var(--accent);
-  opacity: 0.32;
-  filter: blur(4px);
+  opacity: 0.28;
+  filter: blur(3px);
   z-index: -1;
+  transition: opacity 0.25s ease;
 }
-.compass-wrap .marker:hover {
-  transform: translate(-50%, -50%) translateZ(20px) scale(1.4);
+/* 悬停：marker 弹出 + tooltip 浮现 */
+.compass-wrap .marker:hover,
+.compass-wrap .marker:focus {
+  transform: translateZ(20px) scale(1.45);
   z-index: 30;
+  box-shadow: 0 0 14px var(--accent);
 }
-/* Tooltip */
+.compass-wrap .marker:hover::before,
+.compass-wrap .marker:focus::before {
+  opacity: 0.5;
+}
+.compass-wrap .marker:hover .tip,
+.compass-wrap .marker:focus .tip {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ===== Marker 位置（用 data-x/data-y 避免 style 内联变量被平台过滤） ===== */
+.compass-wrap .marker[data-x="20"][data-y="20"] { top: 20%; left: 25%; }
+.compass-wrap .marker[data-x="25"][data-y="20"] { top: 20%; left: 25%; }
+.compass-wrap .marker[data-x="75"][data-y="25"] { top: 25%; left: 75%; }
+.compass-wrap .marker[data-x="15"][data-y="50"] { top: 50%; left: 15%; }
+.compass-wrap .marker[data-x="80"][data-y="70"] { top: 70%; left: 80%; }
+.compass-wrap .marker[data-x="85"][data-y="50"] { top: 85%; left: 50%; }
+.compass-wrap .marker[data-x="50"][data-y="85"] { top: 85%; left: 50%; }
+
+/* ===== Tooltip ===== */
 .compass-wrap .tip {
   position: absolute;
   width: max-content;
@@ -205,6 +204,7 @@
   bottom: 180%;
   left: 50%;
   transform: rotate(calc(-1 * var(--dial-rotate))) translateX(-50%) translateY(4px) translateZ(24px);
+  z-index: 40;
 }
 .compass-wrap .marker[data-side="bottom"] .tip {
   bottom: auto;
@@ -219,6 +219,27 @@
   right: 0;
   transform: rotate(calc(-1 * var(--dial-rotate))) translateY(4px) translateZ(24px);
 }
+/* 箭头 */
+.compass-wrap .tip::after {
+  content: "";
+  position: absolute;
+  border: 5px solid transparent;
+}
+.compass-wrap .marker[data-side="top"] .tip::after {
+  top: 100%;
+  border-top-color: rgba(18, 20, 28, 0.96);
+}
+.compass-wrap .marker[data-side="bottom"] .tip::after {
+  bottom: 100%;
+  border-bottom-color: rgba(18, 20, 28, 0.96);
+}
+.compass-wrap .marker[data-align="center"] .tip::after {
+  left: 50%;
+  transform: translateX(-50%);
+}
+.compass-wrap .marker[data-align="left"] .tip::after { left: 14px; }
+.compass-wrap .marker[data-align="right"] .tip::after { right: 14px; }
+
 .compass-wrap .tip-head {
   padding: 5px 8px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -251,12 +272,8 @@
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
 }
-.compass-wrap .tip-body::-webkit-scrollbar {
-  width: 4px;
-}
-.compass-wrap .tip-body::-webkit-scrollbar-track {
-  background: transparent;
-}
+.compass-wrap .tip-body::-webkit-scrollbar { width: 4px; }
+.compass-wrap .tip-body::-webkit-scrollbar-track { background: transparent; }
 .compass-wrap .tip-body::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.22);
   border-radius: 2px;
@@ -264,122 +281,31 @@
 .compass-wrap .tip-body::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.4);
 }
-/* 箭头 */
-.compass-wrap .tip::after {
-  content: "";
-  position: absolute;
-  border: 5px solid transparent;
-}
-.compass-wrap .marker[data-side="top"] .tip::after {
-  top: 100%;
-  border-top-color: rgba(18, 20, 28, 0.96);
-}
-.compass-wrap .marker[data-side="bottom"] .tip::after {
-  bottom: 100%;
-  border-bottom-color: rgba(18, 20, 28, 0.96);
-}
-.compass-wrap .marker[data-align="center"] .tip::after {
-  left: 50%;
-  transform: translateX(-50%);
-}
-.compass-wrap .marker[data-align="left"] .tip::after {
-  left: 14px;
-}
-.compass-wrap .marker[data-align="right"] .tip::after {
-  right: 14px;
-}
 
-/* ===== 选中效果：marker 高亮 + tooltip 显示 =====
-   用 :has() 精确定位被选中的 marker，
-   tooltip 和 marker 分离，避免 box-shadow 污染。 */
-
-/* nw */
-.compass-wrap #t-nw:checked ~ .compass-stage .compass-dial[data-tilt-target] {
+/* ===== 悬停方向效果：表盘 3D 倾斜 ===== */
+/* markers 在 dial 内部，用 :has() 选择器控制 dial */
+.compass-wrap:has(.marker[data-tilt="nw"]:hover) .compass-dial,
+.compass-wrap:has(.marker[data-tilt="nw"]:focus) .compass-dial {
   transform: rotateX(-11deg) rotateY(13deg) rotate(var(--dial-rotate));
   box-shadow: -14px 18px 40px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
-.compass-wrap #t-nw:checked ~ .compass-stage label[for="t-nw"] {
-  transform: translate(-50%, -50%) translateZ(26px) scale(1.45);
-  box-shadow: 0 0 16px var(--accent);
-}
-.compass-wrap #t-nw:checked ~ .compass-stage label[for="t-nw"] .tip {
-  opacity: 1;
-}
-
-/* ne */
-.compass-wrap #t-ne:checked ~ .compass-stage .compass-dial[data-tilt-target] {
+.compass-wrap:has(.marker[data-tilt="ne"]:hover) .compass-dial,
+.compass-wrap:has(.marker[data-tilt="ne"]:focus) .compass-dial {
   transform: rotateX(-10deg) rotateY(-13deg) rotate(var(--dial-rotate));
   box-shadow: 14px 18px 40px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
-.compass-wrap #t-ne:checked ~ .compass-stage label[for="t-ne"] {
-  transform: translate(-50%, -50%) translateZ(26px) scale(1.45);
-  box-shadow: 0 0 16px var(--accent);
-}
-.compass-wrap #t-ne:checked ~ .compass-stage label[for="t-ne"] .tip {
-  opacity: 1;
-}
-
-/* w */
-.compass-wrap #t-w:checked ~ .compass-stage .compass-dial[data-tilt-target] {
+.compass-wrap:has(.marker[data-tilt="w"]:hover) .compass-dial,
+.compass-wrap:has(.marker[data-tilt="w"]:focus) .compass-dial {
   transform: rotateY(14deg) rotate(var(--dial-rotate));
   box-shadow: -16px 10px 38px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
-.compass-wrap #t-w:checked ~ .compass-stage label[for="t-w"] {
-  transform: translate(-50%, -50%) translateZ(26px) scale(1.45);
-  box-shadow: 0 0 16px var(--accent);
-}
-.compass-wrap #t-w:checked ~ .compass-stage label[for="t-w"] .tip {
-  opacity: 1;
-}
-
-/* se */
-.compass-wrap #t-se:checked ~ .compass-stage .compass-dial[data-tilt-target] {
+.compass-wrap:has(.marker[data-tilt="se"]:hover) .compass-dial,
+.compass-wrap:has(.marker[data-tilt="se"]:focus) .compass-dial {
   transform: rotateX(10deg) rotateY(-12deg) rotate(var(--dial-rotate));
   box-shadow: 14px -10px 38px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
-.compass-wrap #t-se:checked ~ .compass-stage label[for="t-se"] {
-  transform: translate(-50%, -50%) translateZ(26px) scale(1.45);
-  box-shadow: 0 0 16px var(--accent);
-}
-.compass-wrap #t-se:checked ~ .compass-stage label[for="t-se"] .tip {
-  opacity: 1;
-}
-
-/* s */
-.compass-wrap #t-s:checked ~ .compass-stage .compass-dial[data-tilt-target] {
-  transform: rotateX(12deg) rotate(var(--dial-rotate));
-  box-shadow: 0 -16px 40px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-}
-.compass-wrap #t-s:checked ~ .compass-stage label[for="t-s"] {
-  transform: translate(-50%, -50%) translateZ(26px) scale(1.45);
-  box-shadow: 0 0 16px var(--accent);
-}
-.compass-wrap #t-s:checked ~ .compass-stage label[for="t-s"] .tip {
-  opacity: 1;
-}
-
-/* 旋转版本 t2-a (ne) */
-.compass-wrap #t2-a:checked ~ .compass-stage label[for="t2-a"] {
-  transform: translate(-50%, -50%) translateZ(26px) scale(1.45);
-  box-shadow: 0 0 16px var(--accent);
-}
-.compass-wrap #t2-a:checked ~ .compass-stage label[for="t2-a"] .tip {
-  opacity: 1;
-}
-.compass-wrap #t2-a:checked ~ .compass-stage .compass-dial[data-tilt-target] {
-  transform: rotateX(-10deg) rotateY(-13deg) rotate(var(--dial-rotate));
-  box-shadow: 14px 18px 40px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-}
-
-/* 旋转版本 t2-b (s) */
-.compass-wrap #t2-b:checked ~ .compass-stage label[for="t2-b"] {
-  transform: translate(-50%, -50%) translateZ(26px) scale(1.45);
-  box-shadow: 0 0 16px var(--accent);
-}
-.compass-wrap #t2-b:checked ~ .compass-stage label[for="t2-b"] .tip {
-  opacity: 1;
-}
-.compass-wrap #t2-b:checked ~ .compass-stage .compass-dial[data-tilt-target] {
+.compass-wrap:has(.marker[data-tilt="s"]:hover) .compass-dial,
+.compass-wrap:has(.marker[data-tilt="s"]:focus) .compass-dial {
   transform: rotateX(12deg) rotate(var(--dial-rotate));
   box-shadow: 0 -16px 40px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
