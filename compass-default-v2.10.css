@@ -6,7 +6,7 @@
   --dial-rotate: 0deg;
   --tip-max-h: 90px;
   position: relative;
-  width: max-content;
+  width: 100%;
   max-width: var(--size);
   margin: 0 auto;
   padding: 30px 18px;
@@ -17,6 +17,13 @@
   z-index: 1;
   isolation: isolate;
   overflow: visible;
+}
+
+/* 手机端：不使用 max-content，改为固定最小尺寸 + 居中 */
+@media (max-width: 400px) {
+  .compass-wrap {
+    width: min(320px, 92vw);
+  }
 }
 .compass-wrap:hover { z-index: 1000; }
 .compass-wrap *:focus,
