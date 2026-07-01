@@ -1,0 +1,726 @@
+/* base-cabinet-v1.css — 基建系统3D柜子样式 */
+
+/* ===== 动画区（速度由 CSS 变量 --anim-speed 控制） ===== */
+@keyframes bc-spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+/* ===== 柜子基础 ===== */
+.bc-cabinet {
+  perspective: 800px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #ccc;
+  background: #1a1a1a;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.8);
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.bc-inner {
+  transform: rotateX(8deg);
+  transform-style: preserve-3d;
+  background: linear-gradient(180deg, #222 0%, #111 100%);
+  border: 2px solid #333;
+  border-top-color: #111;
+  border-bottom-color: #555;
+  border-radius: 4px;
+  padding: 10px;
+  box-shadow: inset 0 15px 25px rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ===== 搁板通用 ===== */
+.bc-shelf {
+  background: linear-gradient(90deg, #2a2a2a, #333, #2a2a2a);
+  border-top: 1px solid #555;
+  border-bottom: 3px solid #0a0a0a;
+  box-shadow: 0 5px 8px -2px rgba(0, 0, 0, 0.8);
+  border-radius: 2px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bc-shelf-title {
+  font-size: 10px;
+  color: #888;
+  letter-spacing: 1px;
+  border-bottom: 1px dashed #444;
+  padding-bottom: 2px;
+  margin-bottom: 2px;
+}
+
+.bc-sub-title {
+  font-size: 10px;
+  color: #888;
+  letter-spacing: 1px;
+  border-bottom: none;
+  padding-bottom: 2px;
+  margin-bottom: 2px;
+  margin-top: 4px;
+}
+
+/* ===== 小面板 ===== */
+.bc-panel {
+  background: #181818;
+  border: 1px solid #333;
+  border-bottom-color: #555;
+  border-radius: 4px;
+  padding: 10px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: inset 0 0 10px #000;
+}
+
+/* ===== 风力发电机 ===== */
+.bc-wind-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #0a0a0a;
+  border: 2px solid #2a2a2a;
+  border-bottom-color: #444;
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.bc-wind-blade {
+  width: 36px;
+  height: 36px;
+  position: absolute;
+  animation: bc-spin calc(1.2s / var(--anim-speed, 1)) linear infinite;
+  animation-delay: calc(-1.2s * var(--anim-offset, 0) / var(--anim-speed, 1));
+}
+
+.bc-wind-blade .bc-blade-h,
+.bc-wind-blade .bc-blade-v {
+  position: absolute;
+  background: #777;
+  border-radius: 1px;
+}
+.bc-wind-blade .bc-blade-h {
+  top: 0;
+  left: 15px;
+  width: 6px;
+  height: 36px;
+}
+.bc-wind-blade .bc-blade-v {
+  top: 15px;
+  left: 0;
+  width: 36px;
+  height: 6px;
+}
+.bc-wind-blade .bc-blade-center {
+  position: absolute;
+  top: 13px;
+  left: 13px;
+  width: 10px;
+  height: 10px;
+  background: #aaa;
+  border-radius: 50%;
+  box-shadow: 0 0 3px #000;
+}
+
+/* ===== 太阳能板 ===== */
+/* ===== 太阳能板 ===== */
+.bc-solar {
+  width: 52px;
+  height: 41px;
+  background: #1e4d7b;
+  border: 1px solid #555;
+  border-radius: 1px;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.8);
+  background-image:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.25) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.25) 1px, transparent 1px);
+  background-size: 6px 6px;
+  transform: perspective(80px) rotateX(45deg);
+}
+
+/* ===== 水管底座圆 ===== */
+.bc-pipe-cap {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, #333 30%, #151515 90%);
+  border: 1px solid #111;
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.1),
+    0 3px 6px rgba(0, 0, 0, 0.9);
+  z-index: 1;
+}
+
+/* ===== 水管主体 ===== */
+.bc-pipe-bar {
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  right: 14px;
+  height: 24px;
+  z-index: 2;
+  border-radius: 12px;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.95) 0%,
+      rgba(0, 0, 0, 0) 8%,
+      rgba(0, 0, 0, 0) 92%,
+      rgba(0, 0, 0, 0.95) 100%
+    ),
+    linear-gradient(180deg, #333 0%, #aaa 20%, #444 65%, #111 100%);
+  box-shadow: 0 12px 15px -4px rgba(0, 0, 0, 0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ===== 水管视窗 ===== */
+.bc-water-window {
+  width: 70px;
+  height: 12px;
+  background: #123e66;
+  border-radius: 6px;
+  border: 1px solid #111;
+  box-shadow:
+    inset 0 2px 5px rgba(0, 0, 0, 0.8),
+    0 1px 1px rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* 气泡飞过层 */
+.bc-bubbles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+.bc-bub1,
+.bc-bub2,
+.bc-bub3 {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(180, 230, 255, 0.7) 0%,
+    rgba(120, 180, 240, 0.4) 40%,
+    rgba(80, 140, 220, 0.2) 70%,
+    transparent 100%
+  );
+}
+
+.bc-bub1 {
+  width: 5px;
+  height: 5px;
+  left: -6px;
+  top: 40%;
+  animation: bc-bubFly 2.2s ease-in infinite;
+}
+.bc-bub2 {
+  width: 3px;
+  height: 3px;
+  left: -4px;
+  top: 65%;
+  animation: bc-bubFly 1.8s ease-in infinite 0.7s;
+}
+.bc-bub3 {
+  width: 4px;
+  height: 4px;
+  left: -5px;
+  top: 20%;
+  animation: bc-bubFly 2.5s ease-in infinite 1.3s;
+}
+
+@keyframes bc-bubFly {
+  0% {
+    transform: translateX(0) translateY(0) scale(0.5);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+    transform: translateX(0) translateY(0) scale(1);
+  }
+  80% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateX(85px) translateY(-3px) scale(0.6);
+    opacity: 0;
+  }
+}
+
+/* 焦散层1 — 深蓝流水带 */
+.bc-wave {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    repeating-linear-gradient(
+      80deg,
+      transparent 0px,
+      rgba(15, 50, 110, 0.4) 2px,
+      transparent 5px
+    ),
+    repeating-linear-gradient(
+      -60deg,
+      transparent 0px,
+      rgba(20, 70, 150, 0.3) 3px,
+      transparent 7px
+    );
+  animation: bc-waveMove 3s linear infinite;
+}
+
+@keyframes bc-waveMove {
+  0%   { background-position: 0 0, 0 0; }
+  100% { background-position: 7px 0, 5px 0; }
+}
+
+/* 焦散层2 — 中层水流 */
+.bc-mid-flow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    repeating-linear-gradient(
+      30deg,
+      transparent 0px,
+      rgba(40, 110, 200, 0.3) 4px,
+      transparent 9px
+    ),
+    repeating-linear-gradient(
+      -40deg,
+      transparent 0px,
+      rgba(80, 160, 240, 0.25) 3px,
+      transparent 6px
+    );
+  animation: bc-midFlow 4s linear infinite reverse;
+}
+
+@keyframes bc-midFlow {
+  0%   { background-position: 0 0, 0 0; }
+  100% { background-position: 9px 0, 6px 0; }
+}
+
+/* 焦散层3 — 多枚独立椭圆光斑随机方向游走 */
+.bc-caustic {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* 6 枚光斑：大小、速度、方向、Y偏移都不同 */
+.bc-c1 {
+  position: absolute;
+  width: 22px;
+  height: 6px;
+  background: radial-gradient(
+    ellipse,
+    rgba(120, 180, 240, 0.4) 0%,
+    transparent 75%
+  );
+  top: 22%;
+  left: -24px;
+  animation: bc-c1 calc(0.9s / var(--anim-speed, 1)) linear infinite;
+}
+.bc-c2 {
+  position: absolute;
+  width: 16px;
+  height: 5px;
+  background: radial-gradient(
+    ellipse,
+    rgba(140, 200, 255, 0.45) 0%,
+    transparent 75%
+  );
+  top: 62%;
+  left: -18px;
+  animation: bc-c2 calc(1.1s / var(--anim-speed, 1)) linear infinite;
+}
+.bc-c3 {
+  position: absolute;
+  width: 12px;
+  height: 4px;
+  background: radial-gradient(
+    ellipse,
+    rgba(170, 220, 255, 0.5) 0%,
+    transparent 75%
+  );
+  top: 38%;
+  left: 110%;
+  animation: bc-c3 calc(0.8s / var(--anim-speed, 1)) linear infinite;
+}
+.bc-c4 {
+  position: absolute;
+  width: 26px;
+  height: 6px;
+  background: radial-gradient(
+    ellipse,
+    rgba(110, 170, 235, 0.35) 0%,
+    transparent 75%
+  );
+  top: 80%;
+  left: -28px;
+  animation: bc-c4 calc(0.95s / var(--anim-speed, 1)) linear infinite;
+}
+.bc-c5 {
+  position: absolute;
+  width: 14px;
+  height: 4px;
+  background: radial-gradient(
+    ellipse,
+    rgba(155, 210, 255, 0.45) 0%,
+    transparent 75%
+  );
+  top: 12%;
+  left: 110%;
+  animation: bc-c5 calc(0.8s / var(--anim-speed, 1)) linear infinite;
+}
+.bc-c6 {
+  position: absolute;
+  width: 10px;
+  height: 3px;
+  background: radial-gradient(
+    ellipse,
+    rgba(190, 230, 255, 0.5) 0%,
+    transparent 75%
+  );
+  top: 50%;
+  left: -12px;
+  animation: bc-c6 calc(0.65s / var(--anim-speed, 1)) linear infinite;
+}
+
+/* 3 枚往右流 */
+@keyframes bc-c1 {
+  0% {
+    transform: translateX(0) translateY(0) rotate(15deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.85;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(135px) translateY(-4px) rotate(15deg);
+    opacity: 0;
+  }
+}
+@keyframes bc-c2 {
+  0% {
+    transform: translateX(0) translateY(0) rotate(-25deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.75;
+  }
+  88% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateX(130px) translateY(5px) rotate(-25deg);
+    opacity: 0;
+  }
+}
+@keyframes bc-c4 {
+  0% {
+    transform: translateX(0) translateY(0) rotate(-10deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.7;
+  }
+  92% {
+    opacity: 0.45;
+  }
+  100% {
+    transform: translateX(135px) translateY(3px) rotate(-10deg);
+    opacity: 0;
+  }
+}
+
+/* 3 枚往左流 */
+@keyframes bc-c3 {
+  0% {
+    transform: translateX(0) translateY(0) rotate(20deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(-125px) translateY(-3px) rotate(20deg);
+    opacity: 0;
+  }
+}
+@keyframes bc-c5 {
+  0% {
+    transform: translateX(0) translateY(0) rotate(-15deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.85;
+  }
+  88% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateX(-130px) translateY(4px) rotate(-15deg);
+    opacity: 0;
+  }
+}
+@keyframes bc-c6 {
+  0% {
+    transform: translateX(0) translateY(0) rotate(5deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.95;
+  }
+  85% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(-120px) translateY(-5px) rotate(5deg);
+    opacity: 0;
+  }
+}
+
+/* 光流层 */
+.bc-flow-light {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 12px,
+      rgba(60, 140, 220, 0.18) 18px,
+      rgba(140, 200, 255, 0.28) 22px,
+      rgba(60, 140, 220, 0.18) 26px,
+      transparent 32px,
+      transparent 55px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 28px,
+      rgba(60, 140, 220, 0.15) 38px,
+      rgba(140, 200, 255, 0.25) 42px,
+      rgba(60, 140, 220, 0.15) 46px,
+      transparent 56px,
+      transparent 80px
+    );
+  animation: bc-lightFlow 1.5s linear infinite;
+  animation-delay: calc(-1.5s * var(--anim-offset, 0) / var(--anim-speed, 1));
+}
+
+/* 反向光流层 */
+.bc-flow-light-rev {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    transparent 20px,
+    rgba(60, 140, 220, 0.12) 28px,
+    rgba(140, 200, 255, 0.2) 32px,
+    rgba(60, 140, 220, 0.12) 36px,
+    transparent 44px,
+    transparent 70px
+  );
+  animation: bc-lightFlowRev 2s linear infinite;
+  animation-delay: calc(-2s * var(--anim-offset, 0) / var(--anim-speed, 1));
+}
+
+@keyframes bc-lightFlow {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 55px 0;
+  }
+}
+@keyframes bc-lightFlowRev {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -70px 0;
+  }
+}
+
+/* 底部深度阴影 */
+.bc-depth {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 45%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 15, 40, 0.7) 100%
+  );
+  border-radius: 0 0 5px 5px;
+}
+
+/* 表面高光 */
+.bc-surface {
+  position: absolute;
+  top: 1px;
+  left: 4%;
+  width: 92%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(200, 230, 255, 0.7) 30%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(200, 230, 255, 0.7) 70%,
+    transparent 100%
+  );
+  border-radius: 2px;
+  animation: bc-surfaceShimmer calc(2s / var(--anim-speed, 1)) ease-in-out
+    infinite alternate;
+}
+
+@keyframes bc-surfaceShimmer {
+  0% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* ===== 产量标签（LCD 刻字风格） ===== */
+.bc-lcd-label {
+  position: absolute;
+  right: 16px;
+  font-family: "Courier New", Consolas, monospace;
+  font-size: 10px;
+  font-weight: bold;
+  color: #4da6ff;
+  letter-spacing: 0.5px;
+  /* 刻进去的感觉：双层阴影，上浅下深 */
+  text-shadow:
+    0 1px 0 rgba(0, 100, 200, 0.9),
+    0 -1px 0 rgba(0, 40, 100, 0.5),
+    0 0 6px rgba(77, 166, 255, 0.6);
+  /* 字符间距收紧，模拟 LCD 点阵感 */
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== 储备值标签 ===== */
+.bc-reserve {
+  font-family: "Courier New", Consolas, monospace;
+  font-size: 10px;
+  font-weight: bold;
+  color: #e8c87a;
+  text-shadow: none;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== LCD 屏幕容器（内嵌在水管下方的数字面板） ===== */
+.bc-lcd-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  background: #060e18;
+  border: 1px solid #1a4060;
+  border-radius: 3px;
+  padding: 3px 8px;
+  box-shadow:
+    inset 0 1px 4px rgba(0, 0, 0, 0.8),
+    0 0 8px rgba(20, 80, 160, 0.15);
+  min-width: 80px;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.bc-lcd-line {
+  font-family: "Courier New", Consolas, monospace;
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  line-height: 1.3;
+}
+
+.bc-lcd-line.bc-output {
+  color: #5cda5c;
+}
+.bc-lcd-line.bc-stocked {
+  color: #e8c87a;
+}
+
+/* ===== 纯文本行 ===== */
+.bc-text-row {
+  background: #1c1c1c;
+  border: 1px solid #333;
+  border-radius: 2px;
+  padding: 4px 6px;
+  font-size: 10px;
+  color: #ccc;
+  line-height: 1.6;
+  word-spacing: 2px;
+}
+
+/* ===== 仓库容量条 ===== */
+.bc-cap-bar-wrap {
+  width: 100%;
+  height: 4px;
+  background: #222;
+  border-radius: 2px;
+  overflow: hidden;
+  border: 1px solid #444;
+  margin-top: 4px;
+}
+
+.bc-cap-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #ff8c00, #ff5e00);
+}
+
+.bc-cap-label {
+  font-size: 9px;
+  color: #888;
+  text-align: right;
+  margin-top: 2px;
+}
